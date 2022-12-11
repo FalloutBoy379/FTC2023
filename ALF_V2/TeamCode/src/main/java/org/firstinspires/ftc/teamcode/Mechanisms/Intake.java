@@ -37,7 +37,7 @@ public class Intake extends SubsystemBase {
 
 
 
-    static double INPUT_IN = 0;
+    static double INPUT_IN = 0.1;
     static double INPUT_OUT = 0.9;
     static double INPUT_GRIPPER_CLOSE = 1;
     static double INPUT_GRIPPER_OPEN = 0.5;
@@ -116,9 +116,12 @@ public class Intake extends SubsystemBase {
     }
 
     public double getLiftPosition(){
-        return liftMotor.getCurrentPosition();
+        return liftMotor.getCurrentPosition()* INPUT_EXTENSION_PER_COUNT;
     }
 
+    public double getLiftCurrent(){
+        return liftMotor.getCurrent(CurrentUnit.MILLIAMPS);
+    }
     public void reset(){
         liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }

@@ -18,6 +18,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 @Config
 public class test0 extends LinearOpMode {
     public static double lift_setpoint = 0;
+    public static double Kp = 0;
+    public static double Ki = 0;
+    public static double Kd = 0;
+    public static double Kf = 0;
     DcMotorEx leftExtensionMotor, rightExtensionMotor, leftSlideMotor, rightSlideMotor;
     Servo leftTransferServo, rightTransferServo, gripperYawServo, gripperGripServo;
 
@@ -49,14 +53,24 @@ public class test0 extends LinearOpMode {
         waitForStart();
 
         while(opModeIsActive()){
-            extendTo((int)lift_setpoint);
-//            double leftMotorExtensionCurrent = leftExtensionMotor.getCurrent(CurrentUnit.MILLIAMPS);
-//            double rightMotorExtensionCurrent = rightExtensionMotor.getCurrent(CurrentUnit.MILLIAMPS);
+            pidf_lift.setPIDF(Kp, Ki, Kd, Kf);
+//            extendTo((int)lift_setpoint);
+            double leftMotorExtensionCurrent = leftExtensionMotor.getCurrent(CurrentUnit.MILLIAMPS);
+            double rightMotorExtensionCurrent = rightExtensionMotor.getCurrent(CurrentUnit.MILLIAMPS);
+
+            double output = pidf_lift.calculate(leftExtensionMotor.getCurrentPosition(), lift_setpoint);
+            output = Range.clip(output, -1.0, 1.0);
+            telemetry.addData("Output power: ", output);
+            telemetry.addData("Current position", leftExtensionMotor.getCurrentPosition());
+            leftExtensionMotor.setPower(output);
+            rightExtensionMotor.setPower(output);
+
 //            double errorCurrent = leftMotorExtensionCurrent - rightMotorExtensionCurrent;
 //            double output = pidf_lift.calculate(leftExtensionMotor.getCurrentPosition(), lift_setpoint);
 //            output = Range.clip(output, -1, 1);
 //            leftExtensionMotor.setPower(output);
 //            rightExtensionMotor.setPower(-output);
+            telemetry.update();
         }
     }
 

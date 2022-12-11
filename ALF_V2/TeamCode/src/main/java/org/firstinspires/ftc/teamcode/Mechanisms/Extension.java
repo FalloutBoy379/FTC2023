@@ -111,7 +111,7 @@ public class Extension extends SubsystemBase {
     }
 
     public double[] getExtensionPosition(){
-        return new double[]{leftMotor.getCurrentPosition(), rightMotor.getCurrentPosition()};
+        return new double[]{leftMotor.getCurrentPosition()*EXTENSION_PER_COUNT, rightMotor.getCurrentPosition()*EXTENSION_PER_COUNT};
     }
 
     public double getWristPosition(){
